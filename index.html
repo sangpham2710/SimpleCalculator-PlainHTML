@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="A simple calculator" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Calculator</title>
+		<style>
+			*,
+			*::before,
+			*::after {
+				box-sizing: border-box;
+				font-family: sans-serif;
+				font-weight: normal;
+				padding: 0;
+				margin: 0;
+			}
+
+			:root {
+				--red: #f03e3e;
+				--red-shade: #c92a2a;
+				--violet: #7048e8;
+				--violet-shade: #5f3dc4;
+				--gray: #495057;
+				--gray-tint: #f1f3f5;
+				--gray-shade: #212529;
+			}
+			html {
+				font-size: 62.5%;
+			}
+			body {
+				font-size: 20rem;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				min-height: 100vh;
+			}
+			.calc {
+				display: inline-grid;
+				background-color: var(--gray-shade);
+				padding: 2.4rem;
+				border-radius: 20px;
+				grid-template-rows: minmax(12rem, auto) repeat(5, 10rem);
+				grid-template-columns: repeat(4, 10rem);
+				min-height: auto;
+				width: auto;
+				gap: 1.5rem;
+			}
+			.calc__screen {
+				display: flex;
+				grid-row: 1/2;
+				grid-column: 1/-1;
+				background-color: var(--gray);
+				color: #f1f3f5;
+				border-radius: 10px;
+				font-size: 8rem;
+				align-items: center;
+				justify-content: flex-end;
+				padding: 1.2rem;
+				word-wrap: break-word;
+				word-break: break-all;
+			}
+			.calc__btn {
+				outline: none;
+				border: none;
+				cursor: pointer;
+				background-color: var(--violet);
+				color: #f1f3f5;
+				font-size: 4rem;
+				font-weight: bold;
+				border-radius: 10px;
+				transition: all 0.3s;
+			}
+			.calc__btn:hover {
+				background-color: var(--violet-shade);
+			}
+			.calc__btn--AC,
+			.calc__btn--EQ,
+			.calc__btn--DEL {
+				background-color: var(--red);
+			}
+			.calc__btn--AC:hover,
+			.calc__btn--EQ:hover,
+			.calc__btn--DEL:hover {
+				background-color: var(--red-shade);
+			}
+			.calc__btn--EQ {
+				grid-column: 3 / span 2;
+			}
+			@media (max-width: 560px) {
+				.calc {
+					padding: 2rem;
+					grid-template-rows: minmax(8.4rem, auto) repeat(5, 6.4rem);
+					grid-template-columns: repeat(4, 6.4rem);
+				}
+				.calc__screen {
+					font-size: 5.2rem;
+				}
+				.calc__btn {
+					font-size: 2.4rem;
+					font-weight: bolder;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="calc">
+			<div class="calc__screen"></div>
+			<button name="C" class="calc__btn calc__btn--AC">AC</button>
+			<button name="D" class="calc__btn calc__btn--DEL">DEL</button>
+			<button name="%" class="calc__btn">%</button>
+			<button name="/" class="calc__btn">&div;</button>
+			<button name="1" class="calc__btn">1</button>
+			<button name="2" class="calc__btn">2</button>
+			<button name="3" class="calc__btn">3</button>
+			<button name="*" class="calc__btn">&times;</button>
+			<button name="4" class="calc__btn">4</button>
+			<button name="5" class="calc__btn">5</button>
+			<button name="6" class="calc__btn">6</button>
+			<button name="+" class="calc__btn">+</button>
+			<button name="7" class="calc__btn">7</button>
+			<button name="8" class="calc__btn">8</button>
+			<button name="9" class="calc__btn">9</button>
+			<button name="-" class="calc__btn">-</button>
+			<button name="." class="calc__btn">.</button>
+			<button name="0" class="calc__btn">0</button>
+			<button name="=" class="calc__btn calc__btn--EQ">=</button>
+		</div>
+		<script>
+			const buttons = document.querySelectorAll(".calc__btn");
+			const screen = document.querySelector(".calc__screen");
+			const normalize = (text, zeros) => {
+				return Math.round(Number(text) * 10 ** zeros) / 10 ** zeros;
+			};
+			const updateScreen = (input) => {
+				let updatedTextContent = screen.textContent;
+				switch (input) {
+					case "C":
+						updatedTextContent = "";
+						break;
+					case "D":
+						updatedTextContent = updatedTextContent.slice(0, -1);
+						break;
+					case "%":
+						updatedTextContent = eval(updatedTextContent);
+						updatedTextContent *= 0.01;
+						updatedTextContent = normalize(updatedTextContent, 10);
+						break;
+					case "=":
+						updatedTextContent = eval(updatedTextContent);
+						updatedTextContent = normalize(updatedTextContent, 10);
+						break;
+					default:
+						updatedTextContent += input;
+				}
+				screen.textContent = updatedTextContent;
+			};
+			buttons.forEach((btn) =>
+				btn.addEventListener("click", (e) => {
+					const input = e.target.getAttribute("name");
+					updateScreen(input);
+				})
+			);
+		</script>
+	</body>
+</html>
